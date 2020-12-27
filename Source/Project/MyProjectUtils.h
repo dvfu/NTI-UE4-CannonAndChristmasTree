@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+class AProjectileActor;
+
 struct InputData {
 	int projectileCount;
 	float initialProjectileVelocity;
@@ -12,5 +14,5 @@ struct InputData {
 class PROJECT_API MyProjectUtils {
 public:
 	static TUniquePtr<InputData> LoadInputFile();
-	static void SaveOutputAndExit(float lastAngle, FVector lastProjectilePosition);
+	static void SaveOutputAndExit(float lastAngle, AProjectileActor* projectile);
 };

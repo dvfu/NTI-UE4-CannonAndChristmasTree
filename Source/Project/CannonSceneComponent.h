@@ -15,13 +15,16 @@ public:
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cannon")
-	AActor* currentProjectile;
+	AProjectileActor* currentProjectile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cannon")
 	AActor* christmasTree;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cannon")
 	AActor* floor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cannon")
+	AProjectileActor* bestProjectile = nullptr;
 
 	UFUNCTION() void BeginOverlap(
 		UPrimitiveComponent* OverlappedComponent,
@@ -39,6 +42,7 @@ private:
 		actor->SetActorLocation(GetComponentLocation());
 		actor->SetInitialVelocity(initialProjectileVelocity);
 		actor->SetVelocityAngle(angle);
+		actor->SetChristmasTree(christmasTree);
 		lastAngle = angle;
 
 		FScriptDelegate delegate;
@@ -52,6 +56,5 @@ private:
 	int projectileLeft;
 	bool finished = false;
 
-	FVector lastProjectileOverlapLocation;
 	float lastAngle = 0;
 };

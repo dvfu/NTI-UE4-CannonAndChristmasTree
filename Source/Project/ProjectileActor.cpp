@@ -27,6 +27,10 @@ AProjectileActor::AProjectileActor() {
 	ProjectileMovementComponent->ProjectileGravityScale = 0.5f;
 
 	CollisionComponent->GetCollisionResponseToComponent(CollisionComponent);
+
+	FScriptDelegate delegate;
+	delegate.BindUFunction(this, "BeginOverlap");
+	OnActorBeginOverlap.Add(delegate);
 }
 
 void AProjectileActor::SetVelocityAngle(float angle) const {
@@ -37,6 +41,20 @@ void AProjectileActor::SetVelocityAngle(float angle) const {
 
 void AProjectileActor::SetInitialVelocity(float velocity) {
 	initialVelocity = velocity;
+}
+
+void AProjectileActor::SetChristmasTree(AActor* actor) {
+	christmasTree = actor;
+}
+
+TOptional<FVector> AProjectileActor::GetLocationOfOverlappingWithTree() const {
+	return overlapLocation;
+}
+
+void AProjectileActor::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	if (OtherActor == christmasTree) {
+		overlapLocation = GetActorLocation();
+	}
 }
 
 void AProjectileActor::BeginPlay() {

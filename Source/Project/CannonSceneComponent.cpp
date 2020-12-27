@@ -18,7 +18,7 @@ void UCannonSceneComponent::BeginOverlap(UPrimitiveComponent* OverlappedComponen
 
 	}
 
-	lastProjectileOverlapLocation = currentProjectile->GetActorLocation();
+	bestProjectile = currentProjectile;
 	currentProjectile->OnActorBeginOverlap.Clear();
 	currentProjectile = nullptr;
 }
@@ -41,7 +41,7 @@ void UCannonSceneComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	}
 
 	if (projectileLeft == 0 && currentProjectile == nullptr && !finished) {
-		MyProjectUtils::SaveOutputAndExit(lastAngle, lastProjectileOverlapLocation);
+		MyProjectUtils::SaveOutputAndExit(lastAngle, bestProjectile);
 		finished = true;
 	}
 }

@@ -1,4 +1,5 @@
 #include "MyProjectUtils.h"
+#include "ProjectileActor.h"
 
 InputData::InputData(int aProjectileCount, float aInitialProjectileVelocity)
 	: projectileCount(aProjectileCount), initialProjectileVelocity(aInitialProjectileVelocity)
@@ -22,10 +23,15 @@ TUniquePtr<InputData> MyProjectUtils::LoadInputFile() {
 	return MakeUnique<InputData>(projectileCount, initialProjectileVelocity);
 }
 
-void MyProjectUtils::SaveOutputAndExit(float lastAngle, FVector lastProjectilePosition) {
+void MyProjectUtils::SaveOutputAndExit(float lastAngle, AProjectileActor* projectile) {
+	auto optLocation = projectile->GetLocationOfOverlappingWithTree();
+
 	TArray<FString> outputItems;
-	for (const auto& value : { lastAngle, lastProjectilePosition.X, lastProjectilePosition.Y, lastProjectilePosition.Z }) {
-		outputItems.Add(FString::SanitizeFloat(value));
+	if (optLocation.IsSet()) {
+		const auto location = optLocation.GetValue();
+		for (const auto& value : { lastAngle, location.X, location.Y, location.Z }) {
+			outputItems.Add(FString::SanitizeFloat(value));
+		}
 	}
 
 	const auto path = FPaths::Combine(FPaths::LaunchDir(), FString("output.txt"));
