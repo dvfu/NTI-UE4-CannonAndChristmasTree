@@ -9,8 +9,9 @@ TUniquePtr<InputData> MyProjectUtils::LoadInputFile() {
 	auto projectileCount = 0;
 	auto initialProjectileVelocity = 0.0f;
 
+	auto launchDir = FPaths::LaunchDir();
 	FString text;
-	FFileHelper::LoadFileToString(text, *FPaths::Combine(FPaths::LaunchDir(), FString("input.txt")));
+	FFileHelper::LoadFileToString(text, *FPaths::Combine(launchDir, FString("input.txt")));
 	if (text.Len() > 0) {
 		int32 pos;
 		text.FindChar(_T(' '), pos);
@@ -18,6 +19,13 @@ TUniquePtr<InputData> MyProjectUtils::LoadInputFile() {
 
 		projectileCount = FCString::Atoi(*text.Mid(pos + 1));
 		initialProjectileVelocity = FCString::Atof(*text.Mid(0, pos));
+	}
+	else {
+		ensureMsgf(false, TEXT("Put your input.txt here %s"), *launchDir);
+
+		// default values
+		initialProjectileVelocity = 1000;
+		projectileCount = 8;
 	}
 	
 	return MakeUnique<InputData>(projectileCount, initialProjectileVelocity);
