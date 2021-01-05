@@ -32,7 +32,10 @@ TUniquePtr<InputData> MyProjectUtils::LoadInputFile() {
 }
 
 void MyProjectUtils::SaveOutputAndExit(float lastAngle, AProjectileActor* projectile) {
-	auto optLocation = projectile->GetLocationOfOverlappingWithTree();
+	TOptional<FVector> optLocation;
+	if (projectile) {
+		optLocation = projectile->GetLocationOfOverlappingWithTree();
+	}
 
 	TArray<FString> outputItems;
 	if (optLocation.IsSet()) {
